@@ -12,11 +12,16 @@ function [x_opt, f_opt] = gradient_descent(f_expr, x0, alpha, epsilon, max_iter)
 
   x = x0; % 初始化x
   iter = 0; % 初始化迭代次数计数器
-
-  grad_f = gradient(f_expr); % 计算目标函数的梯度
+  last_step = 1e-3; % 上一步的梯度
+  h = 1e-7; % 适当小的值  
 
   while iter < max_iter
-      grad = double(subs(grad_f, symvar(f_expr), x)); % 计算当前点的梯度
+      xp = x + h;
+      xm = x - h;
+      grad = (f_expr(xp) - f_expr(xm)) / (2 * h); % 使用一阶差分法计算梯度
+      while abs(last_step)*5 < abs(grad*alpha) % 如果梯度变化太大，减小学习率
+          alpha = alpha / 2;
+      end
       x_new = x - alpha * grad; % 使用梯度下降步骤更新x
 
       % 检查收敛
@@ -29,5 +34,5 @@ function [x_opt, f_opt] = gradient_descent(f_expr, x0, alpha, epsilon, max_iter)
   end
 
   x_opt = x; % 最优解
-  f_opt = double(subs(f_expr, symvar(f_expr), x_opt)); % 最优函数值
+  f_opt = f_expr(x); % 最优函数值
 end
