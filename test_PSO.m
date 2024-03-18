@@ -1,8 +1,8 @@
 % 定义问题实例
-problem.fitnessFunction = @(x) x.^2; % 适应度函数
-problem.lowerBound = [-10,-10]; % 自变量的下界
-problem.upperBound = [10,10]; % 自变量的上界
-problem.dimension = 1; % 自变量的维度
+problem.fitnessFunction = @(x) x(1).^2-x(2).*sin(x(3)); % 适应度函数
+problem.lowerBound = [-1,-1,-1]; % 自变量的下界
+problem.upperBound = [1,1,1]; % 自变量的上界
+problem.dimension = 3; % 自变量的维度
 
 % 粒子群大小和最大迭代次数
 swarmSize = 20;
