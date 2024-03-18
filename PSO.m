@@ -13,9 +13,9 @@ function [bestPosition, bestFitness] = PSO(problem, swarmSize, maxIterations, in
     swarm = initializeSwarm(problem, swarmSize);
     
     % 初始化最佳位置和最佳适应度
-    bestPosition = swarm(1).position;
-    bestFitness = swarm(1).fitness;
-    
+    [bestFitness, site] = min(swarm(1).fitness);
+    bestPosition = swarm(site).position;
+
     % 主循环
     for iteration = 1:maxIterations
         % 更新粒子的位置和速度
@@ -40,12 +40,14 @@ function swarm = initializeSwarm(problem, swarmSize)
     for i = 1:swarmSize
         % 随机生成粒子的初始位置
         swarm(i).position = rand(1, problem.dimension) * (problem.upperBound - problem.lowerBound) + problem.lowerBound;
+        swarm(i).bestPosition = swarm(i).position;
         
         % 初始化粒子的速度为零向量
         swarm(i).velocity = zeros(1, problem.dimension);
         
         % 计算粒子的初始适应度
         swarm(i).fitness = problem.fitnessFunction(swarm(i).position);
+        swarm(i).bestFitness = swarm(i).fitness;
     end
 end
 
