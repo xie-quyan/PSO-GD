@@ -19,7 +19,7 @@ function [bestPosition, bestFitness] = PSO(problem, swarmSize, maxIterations, in
     % 主循环
     for iteration = 1:maxIterations
         % 更新粒子的位置和速度
-        swarm = updateParticles(swarm, bestPosition);
+        swarm = updateParticles(swarm, bestPosition,problem);
         
         % 评估每个粒子的适应度
         swarm = evaluateFitness(swarm, problem);
@@ -39,7 +39,7 @@ function swarm = initializeSwarm(problem, swarmSize)
     swarm(swarmSize) = struct('position', [], 'velocity', [], 'fitness', [], 'bestPosition', [], 'bestFitness', []);
     for i = 1:swarmSize
         % 随机生成粒子的初始位置
-        swarm(i).position = rand(1, problem.dimension) * (problem.upperBound - problem.lowerBound) + problem.lowerBound;
+        swarm(i).position = rand(1, problem.dimension) .* (problem.upperBound - problem.lowerBound) + problem.lowerBound;
         swarm(i).bestPosition = swarm(i).position;
         
         % 初始化粒子的速度为零向量
@@ -51,8 +51,8 @@ function swarm = initializeSwarm(problem, swarmSize)
     end
 end
 
-% 更新粒子的位置和速度
-function swarm = updateParticles(swarm, bestPosition)
+% 更新粒子的位置和速度，并考虑边界影响
+function swarm = updateParticles(swarm, bestPosition, problem)
     global inertiaWeight  % 惯性权重
     global cognitiveWeight  % 认知权重
     global socialWeight  % 社会权重
@@ -65,6 +65,11 @@ function swarm = updateParticles(swarm, bestPosition)
         
         % 更新粒子的位置
         swarm(i).position = swarm(i).position + swarm(i).velocity;
+
+        % 考虑边界影响
+        % 限制粒子的位置在问题定义的边界内
+        swarm(i).position = max(swarm(i).position, problem.lowerBound);
+        swarm(i).position = min(swarm(i).position, problem.upperBound);
     end
 end
 

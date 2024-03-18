@@ -1,7 +1,7 @@
 % 定义问题实例
-problem.fitnessFunction = @(x) x.^2; % 适应度函数
-problem.lowerBound = [-10,-10]; % 自变量的下界
-problem.upperBound = [10,10]; % 自变量的上界
+problem.fitnessFunction = @(x) x(1).^2; % 适应度函数
+problem.lowerBound = -10; % 自变量的下界
+problem.upperBound = 10; % 自变量的上界
 problem.dimension = 1; % 自变量的维度
 
 % 粒子群大小和最大迭代次数
